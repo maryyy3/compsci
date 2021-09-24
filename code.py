@@ -1,8 +1,25 @@
 from tkinter import *
 from tkinter import ttk
 root = Tk()
-root.geometry("500x500")
+root.title('Julies party hire')
+root.geometry("500x600")
+
+# add style
+style = ttk.Style()
+style.configure("Treeview",
+                background="lightblue",
+                foreground="black",
+                rowheight=25,
+                fieldbackground="silver"
+                )
+
+#change selected colour
+style.map('Treeview',
+background=[('selected', 'grey')])
+
+
 my_tree = ttk.Treeview(root)
+
 
 # defining columns
 my_tree['columns'] = ("Full name", "Receipt number", "Item being hired", "Amount of items")
@@ -26,8 +43,10 @@ my_tree.heading("Amount of items", text="Amount", anchor=W)
 #add data
 data =  [
     ["mary", 1782, "tables", 78],
-    ["john", 1782, "tables", 78]
+    ["john", 3822, "chairs", 125]
 ]
+
+
 
 global count
 count=0
@@ -105,5 +124,10 @@ remove_all.pack(pady=10)
 #remove only one
 remove_one = Button(root, text="Remove one selected", command=remove_one)
 remove_one.pack(pady=10)
+
+
+
+
+
 root.mainloop()
 
