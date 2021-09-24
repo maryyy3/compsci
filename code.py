@@ -7,6 +7,7 @@ my_tree = ttk.Treeview(root)
 # defining columns
 my_tree['columns'] = ("Full name", "Receipt number", "Item being hired", "Amount of items")
 
+
 # formatting columns
 my_tree.column("#0", width=0, stretch=NO, minwidth=25)
 my_tree.column("Full name", anchor=W, width=140)
@@ -21,8 +22,23 @@ my_tree.heading("Receipt number", text="Receipt number", anchor=W)
 my_tree.heading("Item being hired", text="Item being hired", anchor=CENTER)
 my_tree.heading("Amount of items", text="Amount", anchor=W)
 
+
+#add data
+data =  [
+    ["mary", 1782, "tables", 78],
+    ["john", 1782, "tables", 78]
+]
+
+global count
+count=0
+for record in data:
+    my_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2], record[3]))
+    count += 1
+
+
+
 # adding data
-my_tree.insert(parent='', index='end', iid=0, text="", values=("test", 48358, "car", "78") )
+#my_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2], record[3]))
 # pack to screen
 my_tree.pack(pady=20)
 
@@ -56,9 +72,38 @@ il_box.grid(row=1, column=2)
 al_box = Entry(add_frame)
 al_box.grid(row=1, column=3)
 
-# creating buttons
+# add record
+def add_record():
+    global count
+    my_tree.insert(parent='', index='end', iid=count, text="", values=(name_box.get(), rl_box.get(), il_box.get(), al_box.get()))
+    count += 1
+
+    # clear boxes
+    name_box.delete(0, END)
+    rl_box.delete(0, END)
+    il_box.delete(0, END)
+    al_box.delete(0, END)
+
+#remove all records
+def remove_all():
+    for record in my_tree.get_children():
+        my_tree.delete(record)
+
+#remove one selected
+def remove_one():
+    x = my_tree.selection()[0]
+    my_tree.delete(x)
+
+#creating buttons
 add_record = Button(root, text="Add record", command=add_record)
 add_record.pack(pady=20)
 
+#remove all
+remove_all = Button(root, text="Remove records", command=remove_all)
+remove_all.pack(pady=10)
+
+#remove only one
+remove_one = Button(root, text="Remove one selected", command=remove_one)
+remove_one.pack(pady=10)
 root.mainloop()
 
