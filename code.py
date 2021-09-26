@@ -3,7 +3,7 @@ from tkinter import ttk
 
 root = Tk()
 root.title('Julies party hire')
-root.geometry("1000x600")
+root.geometry("900x600")
 
 # add style and theme
 style = ttk.Style()
@@ -44,83 +44,70 @@ my_tree.column("#0", width=0, stretch=NO, minwidth=25)
 my_tree.column("Full name", anchor=W, width=140)
 my_tree.column("Receipt number", anchor=CENTER, width=100)
 my_tree.column("Item being hired", anchor=W, width=140)
-my_tree.column("Amount of items", anchor=E, width=80)
+my_tree.column("Amount of items", anchor=E, width=90)
 
 # creating headings for columns
 my_tree.heading("#0", text="", anchor=W)
-my_tree.heading("Full name", text="Full name")
-my_tree.heading("Receipt number", text="Receipt number", anchor=W)
+my_tree.heading("Full name", text="Full name", anchor=CENTER)
+my_tree.heading("Receipt number", text="Receipt number", anchor=CENTER)
 my_tree.heading("Item being hired", text="Item being hired", anchor=CENTER)
-my_tree.heading("Amount of items", text="Amount", anchor=W)
+my_tree.heading("Amount of items", text="Amount", anchor=CENTER)
 
-# add data
+# add test data
 data = [
     ["mary", 1782, "tables", 78],
     ["john", 3822, "chairs", 125]
 ]
 
-# crete striped row tags
+# create striped row tags
 my_tree.tag_configure('oddrow', background="white")
 my_tree.tag_configure('evenrow', background="lightblue")
 
 global count
 count = 0
-
-for record in data:
-    if 2 == 0:
-        my_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2], record[3]),
-                       tags=('oddrow',))
-else:
-    my_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2], record[3]),
-                   tags=('evenrow',))
-
-    count += 1
+count += 1
 
 # adding data
 # my_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2], record[3]))
+
 # pack to screen
 my_tree.pack(pady=20)
 
-add_frame = Frame(root)
-add_frame.pack(pady=20)
 
-# labels
-nl = Label(add_frame, text="Full name")
-nl.grid(row=0, column=0)
+# labels and entry boxes
+data_frame = LabelFrame(root, text="Record")
+data_frame.pack(fill="x", expand="yes", padx=20)
 
-rl = Label(add_frame, text="Receipt number")
-rl.grid(row=0, column=1)
+nl = Label(data_frame, text="Full name")
+nl.grid(row=0, column=0, padx=10,pady=10)
+nl_box = Entry(data_frame)
+nl_box.grid(row=1, column=0)
 
-il = Label(add_frame, text="Item being hired")
-il.grid(row=0, column=2)
+rl = Label(data_frame, text="Receipt number")
+rl.grid(row=0, column=1, padx=10, pady=10)
+rl_box = Entry(data_frame)
+rl_box.grid(row=1, column=1, padx=10,pady=10)
 
-al = Label(add_frame, text="Amount")
-al.grid(row=0, column=3)
+il = Label(data_frame, text="Item being hired")
+il.grid(row=0, column=2, padx=10, pady=10)
+il_box = Entry(data_frame)
+il_box.grid(row=1, column=2, padx=10,pady=10)
 
-# entry boxes
-
-name_box = Entry(add_frame)
-name_box.grid(row=1, column=0)
-
-rl_box = Entry(add_frame)
-rl_box.grid(row=1, column=1)
-
-il_box = Entry(add_frame)
-il_box.grid(row=1, column=2)
-
-al_box = Entry(add_frame)
-al_box.grid(row=1, column=3)
+al = Label(data_frame, text="Amount")
+al.grid(row=0, column=3, padx=10,pady=10)
+al_box = Entry(data_frame)
+al_box.grid(row=1, column=3,padx=10,pady=10)
 
 
 # add record
 def add_record():
     global count
     my_tree.insert(parent='', index='end', iid=count, text="",
-                   values=(name_box.get(), rl_box.get(), il_box.get(), al_box.get()))
+                   values=(nl_box.get(), rl_box.get(), il_box.get(), al_box.get()))
     count += 1
 
     # clear boxes
-    name_box.delete(0, END)
+    nl_box.delete(0, END)
     rl_box.delete(0, END)
     il_box.delete(0, END)
     al_box.delete(0, END)
@@ -138,16 +125,34 @@ def remove_one():
     my_tree.delete(x)
 
 
+
 # creating buttons
-add_record = Button(root, text="Add record", command=add_record)
-add_record.pack(side=LEFT, pady=20, padx=100)
+button_frame = LabelFrame(root, text="Commands")
+button_frame.pack(fill="x", expand="yes", padx=20)
+
+# add record
+add_record = Button(button_frame, text="Add record", command=add_record)
+add_record.grid(row=0, column=1, padx=10, pady=10)
+
+#update record
+update_record = Button(button_frame, text="Update record")
+update_record.grid(row=0, column=2, padx=10, pady=10)
+
+#move records up
+move_up = Button(button_frame, text="Move Up" )
+move_up.grid(row=0, column=3, padx=10, pady=10)
+
+#move records down
+move_down = Button(button_frame, text="Move Down" )
+move_down.grid(row=0, column=4, padx=10, pady=10)
+
 
 # remove all
-remove_all = Button(root, text="Remove records", command=remove_all)
-remove_all.pack(pady=10)
+remove_all = Button(button_frame, text="Remove all records", command=remove_all)
+remove_all.grid(row=0, column=5, padx=10, pady=10)
 
 # remove only one
-remove_one = Button(root, text="Remove one selected", command=remove_one)
-remove_one.pack(pady=10)
+remove_one = Button(button_frame, text="Remove one selected", command=remove_one)
+remove_one.grid(row=0, column=6, padx=10, pady=10)
 
 root.mainloop()
