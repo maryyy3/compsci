@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk, Entry, LabelFrame
 from tkinter import messagebox
 
+
 root = Tk()
 root.title('Julies party hire')
 root.geometry("800x650")
@@ -73,10 +74,13 @@ count += 1
 # pack to screen
 my_tree.pack(pady=10)
 
+
+
 # labels and entry boxes
 data_frame: LabelFrame = LabelFrame(root, text="Record")
 data_frame.pack(expand="yes", padx=10, pady=10)
 
+radVar = IntVar()
 nl = Label(data_frame, text="Full name")
 nl.grid(row=0, column=0, padx=10, pady=10)
 name = StringVar(root, value='Required')
@@ -101,11 +105,6 @@ name3 = StringVar(root, value='Required')
 al_box: Entry = Entry(data_frame, textvariable=name3)
 al_box.grid(row=1, column=3, padx=10, pady=10)
 
-al_box = int(input("Amount"))
-if al_box >= 500:
-    print('')
-else:
-    print("Invalid input must be between 0-500")
 
 
 # add record
@@ -115,11 +114,23 @@ def add_record():
                    values=(nl_box.get(), rl_box.get(), il_box.get(), al_box.get()))
     count += 1
 
-    # clear boxes
-    nl_box.delete(0, END)
-    rl_box.delete(0, END)
-    il_box.delete(0, END)
-    al_box.delete(0, END)
+
+try:
+        amount = int(al_box.get())
+        if amount > 500:
+            messagebox(text='Invalid input - must be between 0-500')
+except:
+        ValueError
+        Amount = 0
+        messagebox("Invalid input - enter a number")
+
+# clear boxes
+nl_box.delete(0, END)
+rl_box.delete(0, END)
+il_box.delete(0, END)
+al_box.delete(0, END)
+
+
 
 
 # remove all records
@@ -165,6 +176,7 @@ def down():
     rows = my_tree.selection()
     for row in reversed(rows):
         my_tree.move(row, my_tree.parent(row), my_tree.index(row) + 1)
+
 
 
 # creating buttons
