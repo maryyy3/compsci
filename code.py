@@ -1,11 +1,37 @@
 from tkinter import *
 from tkinter import ttk, Entry, LabelFrame
 from tkinter import messagebox
-
+import sqlite3
 
 root = Tk()
 root.title('Julies party hire')
 root.geometry("800x650")
+
+# databases
+conn = sqlite3.connect('guidatabase.db')
+
+# creating cursor
+c = conn.cursor()
+
+# create table
+#c.execute("""CREATE TABLE addresses (
+         # name text,
+         # receipt integer,
+         # item text,
+          #amount integer
+          #)""")#
+
+
+
+
+
+
+
+# commit changes
+conn.commit()
+
+# close conn
+conn.close()
 
 # add style and theme
 style = ttk.Style()
@@ -54,12 +80,6 @@ my_tree.heading("Receipt number", text="Receipt number", anchor=CENTER)
 my_tree.heading("Item being hired", text="Item being hired", anchor=CENTER)
 my_tree.heading("Amount of items", text="Amount", anchor=CENTER)
 
-# add test data
-data = [
-    ["mary", 1782, "tables", 78],
-    ["john", 3822, "chairs", 125]
-]
-
 # create striped row tags
 my_tree.tag_configure('oddrow', background="white")
 my_tree.tag_configure('evenrow', background="lightblue")
@@ -74,8 +94,6 @@ count += 1
 # pack to screen
 my_tree.pack(pady=10)
 
-
-
 # labels and entry boxes
 data_frame: LabelFrame = LabelFrame(root, text="Record")
 data_frame.pack(expand="yes", padx=10, pady=10)
@@ -83,28 +101,23 @@ data_frame.pack(expand="yes", padx=10, pady=10)
 radVar = IntVar()
 nl = Label(data_frame, text="Full name")
 nl.grid(row=0, column=0, padx=10, pady=10)
-name = StringVar(root, value='Required')
-nl_box = Entry(data_frame, textvariable=name)
+nl_box = Entry(data_frame)
 nl_box.grid(row=1, column=0)
 
 rl = Label(data_frame, text="Receipt number")
 rl.grid(row=0, column=1, padx=10, pady=10)
-name1 = StringVar(root, value='Required')
-rl_box = Entry(data_frame, textvariable=name1)
+rl_box = Entry(data_frame)
 rl_box.grid(row=1, column=1, padx=10, pady=10)
 
 il = Label(data_frame, text="Item being hired")
 il.grid(row=0, column=2, padx=10, pady=10)
-name2 = StringVar(root, value='Required')
-il_box = Entry(data_frame, textvariable=name2)
+il_box = Entry(data_frame)
 il_box.grid(row=1, column=2, padx=10, pady=10)
 
 al = Label(data_frame, text="Amount")
 al.grid(row=0, column=3, padx=10, pady=10)
-name3 = StringVar(root, value='Required')
-al_box: Entry = Entry(data_frame, textvariable=name3)
+al_box: Entry = Entry(data_frame)
 al_box.grid(row=1, column=3, padx=10, pady=10)
-
 
 
 # add record
@@ -115,22 +128,35 @@ def add_record():
     count += 1
 
 
-try:
-        amount = int(al_box.get())
-        if amount > 500:
-            messagebox(text='Invalid input - must be between 0-500')
-except:
-        ValueError
-        Amount = 0
-        messagebox("Invalid input - enter a number")
 
-# clear boxes
-nl_box.delete(0, END)
-rl_box.delete(0, END)
-il_box.delete(0, END)
-al_box.delete(0, END)
+    # databases
+    conn = sqlite3.connect('guidatabase.db')
+
+    # creating cursor
+    c = conn.cursor()
+
+    #insert data into table
+    c.execute("INSERT INTO guidatabase.db VALUES (:nl_box, :rl_box, :il_box, :al_box)",
+              {
+                'nl_box': nl_box.get(),
+                'rl_box': rl_box.get(),
+                'il_box': il_box.get(),
+                'al_box': al_box.get()
+
+              })
 
 
+    # commit changes
+    conn.commit()
+
+    # close conn
+    conn.close()
+
+    # clear boxes
+    nl_box.delete(0, END)
+    rl_box.delete(0, END)
+    il_box.delete(0, END)
+    al_box.delete(0, END)
 
 
 # remove all records
@@ -176,7 +202,6 @@ def down():
     rows = my_tree.selection()
     for row in reversed(rows):
         my_tree.move(row, my_tree.parent(row), my_tree.index(row) + 1)
-
 
 
 # creating buttons
