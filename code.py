@@ -1,3 +1,5 @@
+from typing import Any
+
 from tkinter import *
 from tkinter import ttk, Entry, LabelFrame
 from tkinter import messagebox
@@ -8,24 +10,18 @@ root.title('Julies party hire')
 root.geometry("800x650")
 
 # databases
-conn = sqlite3.connect('guidatabase.db')
+conn = sqlite3.connect('addresses')
 
 # creating cursor
 c = conn.cursor()
 
 # create table
-#c.execute("""CREATE TABLE addresses (
-         # name text,
-         # receipt integer,
-         # item text,
-          #amount integer
-          #)""")#
-
-
-
-
-
-
+# c.execute("""CREATE TABLE addresses (
+# name text,
+# receipt integer,
+# item text,
+# amount integer
+# )""")
 
 # commit changes
 conn.commit()
@@ -116,41 +112,47 @@ il_box.grid(row=1, column=2, padx=10, pady=10)
 
 al = Label(data_frame, text="Amount")
 al.grid(row=0, column=3, padx=10, pady=10)
-al_box: Entry = Entry(data_frame)
+al_box: float = Entry(data_frame)
 al_box.grid(row=1, column=3, padx=10, pady=10)
 
 
 # add record
 def add_record():
+    try:
+        int(al_box.get())
+        value = int(al_box.get())
+        if (value >= 500):
+            messagebox.showinfo(title="Error", message="Invalid input - Must be between 1-500")
+        elif (value < 0):
+            messagebox.showinfo(title="Error", message="Invalid input - Must be between 1-500")
+    except ValueError:
+        print("")
+
     global count
     my_tree.insert(parent='', index='end', iid=count, text="",
                    values=(nl_box.get(), rl_box.get(), il_box.get(), al_box.get()))
     count += 1
 
 
-
     # databases
-    conn = sqlite3.connect('guidatabase.db')
+    conn = sqlite3.connect('addresses')
 
     # creating cursor
     c = conn.cursor()
 
-    #insert data into table
-    c.execute("INSERT INTO guidatabase.db VALUES (:nl_box, :rl_box, :il_box, :al_box)",
+    # insert data into table
+    c.execute("INSERT INTO addresses VALUES (:nl_box, :rl_box, :il_box, :al_box)",
               {
-                'nl_box': nl_box.get(),
-                'rl_box': rl_box.get(),
-                'il_box': il_box.get(),
-                'al_box': al_box.get()
+                  'nl_box': nl_box.get(),
+                  'rl_box': rl_box.get(),
+                  'il_box': il_box.get(),
+                  'al_box': al_box.get()
 
               })
-
 
     # commit changes
     conn.commit()
 
-    # close conn
-    conn.close()
 
     # clear boxes
     nl_box.delete(0, END)
@@ -238,5 +240,6 @@ remove_one.grid(row=0, column=7, padx=5, pady=10)
 
 # binding
 my_tree.bind("<ButtonRelease-1>", select_record)
+
 
 root.mainloop()
